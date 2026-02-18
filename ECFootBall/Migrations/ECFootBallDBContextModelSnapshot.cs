@@ -22,6 +22,91 @@ namespace ECFootBall.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ECFootBall.Models.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Nike"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Adidas"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Joma"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Mizuno"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Puma"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsActive = true,
+                            IsDelete = false,
+                            Name = "Asics"
+                        });
+                });
+
             modelBuilder.Entity("ECFootBall.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -29,6 +114,9 @@ namespace ECFootBall.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreateBy")
                         .HasColumnType("nvarchar(max)");
@@ -80,6 +168,9 @@ namespace ECFootBall.Migrations
                     b.Property<int?>("DisplayOrder")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
@@ -101,36 +192,42 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 1,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Đỏ"
                         },
                         new
                         {
                             Id = 2,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Xanh Lá"
                         },
                         new
                         {
                             Id = 3,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Đen"
                         },
                         new
                         {
                             Id = 4,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Trắng"
                         },
                         new
                         {
                             Id = 5,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Vàng"
                         },
                         new
                         {
                             Id = 6,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "Xanh Dương"
                         });
@@ -179,6 +276,9 @@ namespace ECFootBall.Migrations
                     b.Property<int?>("AmountReview")
                         .HasColumnType("int");
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -214,6 +314,8 @@ namespace ECFootBall.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
 
@@ -282,6 +384,9 @@ namespace ECFootBall.Migrations
                     b.Property<int?>("DisplayOrder")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsDelete")
                         .HasColumnType("bit");
 
@@ -303,42 +408,49 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 1,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "38"
                         },
                         new
                         {
                             Id = 2,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "39"
                         },
                         new
                         {
                             Id = 3,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "40"
                         },
                         new
                         {
                             Id = 4,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "41"
                         },
                         new
                         {
                             Id = 5,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "42"
                         },
                         new
                         {
                             Id = 6,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "43"
                         },
                         new
                         {
                             Id = 7,
+                            IsActive = true,
                             IsDelete = false,
                             Name = "44"
                         });
@@ -357,11 +469,19 @@ namespace ECFootBall.Migrations
 
             modelBuilder.Entity("ECFootBall.Models.Product", b =>
                 {
+                    b.HasOne("ECFootBall.Models.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ECFootBall.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Brand");
 
                     b.Navigation("Category");
                 });
@@ -375,6 +495,11 @@ namespace ECFootBall.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ECFootBall.Models.Brand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ECFootBall.Models.Category", b =>

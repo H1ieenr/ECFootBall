@@ -1,15 +1,14 @@
 ﻿namespace ECFootBall.Models
 {
-    public class Category
+    public class Brand
     {
         public int Id { get; set; }
-        public int BrandId {  get; set; }
-        public required string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; }
         public int? DisplayOrder { get; set; }
         public virtual List<Product> Products { get; set; } = new();
-
+        
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
         public DateTime? CreateDate { get; set; }

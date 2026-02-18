@@ -11,6 +11,10 @@ namespace ECFootBall.Models
         public decimal? PricePromotion { get; set; }
         public bool IsActive { get; set; }
 
+        public int BrandId { get; set; }
+        [ForeignKey("BrandId")]
+        public virtual Brand? Brand { get; set; }
+
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]

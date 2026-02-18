@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ECFootBall.Migrations
 {
     /// <inheritdoc />
@@ -12,11 +14,33 @@ namespace ECFootBall.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Brand",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: true),
+                    CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brand", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -39,6 +63,7 @@ namespace ECFootBall.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     DisplayOrder = table.Column<int>(type: "int", nullable: true),
                     CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -58,6 +83,7 @@ namespace ECFootBall.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     DisplayOrder = table.Column<int>(type: "int", nullable: true),
                     CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -80,6 +106,7 @@ namespace ECFootBall.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PricePromotion = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -91,6 +118,12 @@ namespace ECFootBall.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Brand_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brand",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -150,10 +183,55 @@ namespace ECFootBall.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Brand",
+                columns: new[] { "Id", "CreateBy", "CreateDate", "Description", "DisplayOrder", "IsActive", "IsDelete", "Name", "UpdateBy", "UpdateDate" },
+                values: new object[,]
+                {
+                    { 1, null, null, null, null, true, false, "Nike", null, null },
+                    { 2, null, null, null, null, true, false, "Adidas", null, null },
+                    { 3, null, null, null, null, true, false, "Joma", null, null },
+                    { 4, null, null, null, null, true, false, "Mizuno", null, null },
+                    { 5, null, null, null, null, true, false, "Puma", null, null },
+                    { 6, null, null, null, null, true, false, "Asics", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Colors",
+                columns: new[] { "Id", "CreateBy", "CreateDate", "DisplayOrder", "IsActive", "IsDelete", "Name", "UpdateBy", "UpdateDate" },
+                values: new object[,]
+                {
+                    { 1, null, null, null, true, false, "Đỏ", null, null },
+                    { 2, null, null, null, true, false, "Xanh Lá", null, null },
+                    { 3, null, null, null, true, false, "Đen", null, null },
+                    { 4, null, null, null, true, false, "Trắng", null, null },
+                    { 5, null, null, null, true, false, "Vàng", null, null },
+                    { 6, null, null, null, true, false, "Xanh Dương", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Sizes",
+                columns: new[] { "Id", "CreateBy", "CreateDate", "DisplayOrder", "IsActive", "IsDelete", "Name", "UpdateBy", "UpdateDate" },
+                values: new object[,]
+                {
+                    { 1, null, null, null, true, false, "38", null, null },
+                    { 2, null, null, null, true, false, "39", null, null },
+                    { 3, null, null, null, true, false, "40", null, null },
+                    { 4, null, null, null, true, false, "41", null, null },
+                    { 5, null, null, null, true, false, "42", null, null },
+                    { 6, null, null, null, true, false, "43", null, null },
+                    { 7, null, null, null, true, false, "44", null, null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Images_ProductId",
                 table: "Images",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_BrandId",
+                table: "Products",
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -183,6 +261,9 @@ namespace ECFootBall.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Brand");
 
             migrationBuilder.DropTable(
                 name: "Categories");

@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsActive { get; set; }
         public int? DisplayOrder { get; set; }
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
