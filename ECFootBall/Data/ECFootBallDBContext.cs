@@ -13,6 +13,7 @@ namespace ECFootBall.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Color> Colors { get; set; }
+        public DbSet<Brand> Brands { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             DateTime staticDate = new DateTime(2026, 1, 1, 0, 0, 0);
