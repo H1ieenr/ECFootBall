@@ -14,8 +14,8 @@ namespace ECFootBall.Controllers
             _productService = productService;
         }
 
-        [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateStore([FromBody] CreateProductDto dto)
+        [HttpPost("Product")]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
         {
             var result = await _productService.Create(dto);
             return Ok(result);

@@ -3,7 +3,6 @@ using ECFootBall.Data;
 using ECFootBall.Dtos.ProductDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
-using ECFootBall.Models;
 
 namespace ECFootBall._Service.Services
 {

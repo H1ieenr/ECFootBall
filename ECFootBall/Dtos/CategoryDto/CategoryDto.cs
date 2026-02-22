@@ -6,6 +6,9 @@ namespace ECFootBall.Dtos.CategoryDto
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+
+        public int? BrandId { get; set; }
+        public int? ParentId { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
         public int? DisplayOrder { get; set; }

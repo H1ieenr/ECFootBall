@@ -15,10 +15,7 @@ namespace ECFootBall.Models
         [ForeignKey("BrandId")]
         public virtual Brand? Brand { get; set; }
 
-        public int CategoryId { get; set; }
-
-        [ForeignKey("CategoryId")]
-        public virtual Category? Category { get; set; }
+        public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
         public List<Image> Images { get; set; } = new();
         public List<ProductVariant> Variants { get; set; }

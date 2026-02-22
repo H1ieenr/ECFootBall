@@ -14,7 +14,6 @@ namespace ECFootBall.Helpers.Mapper
                 Price = dto.Price,
                 PricePromotion = dto.PricePromotion,
                 Description = dto.Description,
-                CategoryId = dto.CategoryId,
                 CreateDate = DateTime.Now,
                 IsActive = true,
                 CreateBy = dto.CreateBy,
@@ -22,6 +21,22 @@ namespace ECFootBall.Helpers.Mapper
                 {
                     UrlImage = img.UrlImage
                 }).ToList() ?? new()
+            };
+        }
+
+        public static ProductDto MapToDto(this Product entity)
+        {
+            return new ProductDto
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Price = entity.Price,
+                PricePromotion = entity.PricePromotion,
+                Description = entity.Description,
+                BrandId = entity.BrandId,
+                
+                BrandName = entity.Brand?.Name,
+                ImageUrls = entity.Images?.Select(i => i.UrlImage).ToList() ?? new()
             };
         }
     }

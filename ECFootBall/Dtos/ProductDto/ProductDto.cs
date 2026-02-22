@@ -12,11 +12,14 @@ namespace ECFootBall.Dtos.ProductDto
         public decimal? PricePromotion { get; set; }
         public bool IsActive { get; set; }
 
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
 
-        public virtual Category? Category { get; set; }
-
-        public List<Image> Images { get; set; }
+        public List<string> ImageUrls { get; set; }
+        public List<Image> Images { get; set; } = new();
         public List<ProductVariant> Variants { get; set; }
 
 
@@ -24,7 +27,7 @@ namespace ECFootBall.Dtos.ProductDto
         public string? UpdateBy { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public bool? IsDelete { get; set; }
+        public bool? IsDelete { get; set; } = false;
         public int? AmountReview { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECFootBall.Migrations
 {
     [DbContext(typeof(ECFootBallDBContext))]
-    [Migration("20260218174410_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260222054157_InitialManual")]
+    partial class InitialManual
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace ECFootBall.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CategoriesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductCategoryLinks", (string)null);
+                });
 
             modelBuilder.Entity("ECFootBall.Models.Brand", b =>
                 {
@@ -69,6 +84,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 1,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Nike"
@@ -76,6 +94,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 2,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 2,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Adidas"
@@ -83,6 +104,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 3,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 3,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Joma"
@@ -90,6 +114,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 4,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 4,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Mizuno"
@@ -97,6 +124,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 5,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 5,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Puma"
@@ -104,6 +134,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 6,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 6,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Asics"
@@ -118,7 +151,7 @@ namespace ECFootBall.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BrandId")
+                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreateBy")
@@ -143,6 +176,9 @@ namespace ECFootBall.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UpdateBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -150,6 +186,8 @@ namespace ECFootBall.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
@@ -195,6 +233,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 1,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Đỏ"
@@ -202,6 +243,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 2,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 2,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Xanh Lá"
@@ -209,6 +253,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 3,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 3,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Đen"
@@ -216,6 +263,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 4,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 4,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Trắng"
@@ -223,6 +273,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 5,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 5,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Vàng"
@@ -230,6 +283,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 6,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 6,
                             IsActive = true,
                             IsDelete = false,
                             Name = "Xanh Dương"
@@ -282,9 +338,6 @@ namespace ECFootBall.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreateBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -319,8 +372,6 @@ namespace ECFootBall.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -411,6 +462,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 1,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
                             IsActive = true,
                             IsDelete = false,
                             Name = "38"
@@ -418,6 +472,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 2,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 2,
                             IsActive = true,
                             IsDelete = false,
                             Name = "39"
@@ -425,6 +482,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 3,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 3,
                             IsActive = true,
                             IsDelete = false,
                             Name = "40"
@@ -432,6 +492,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 4,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 4,
                             IsActive = true,
                             IsDelete = false,
                             Name = "41"
@@ -439,6 +502,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 5,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 5,
                             IsActive = true,
                             IsDelete = false,
                             Name = "42"
@@ -446,6 +512,9 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 6,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 6,
                             IsActive = true,
                             IsDelete = false,
                             Name = "43"
@@ -453,10 +522,37 @@ namespace ECFootBall.Migrations
                         new
                         {
                             Id = 7,
+                            CreateBy = "admin",
+                            CreateDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 7,
                             IsActive = true,
                             IsDelete = false,
                             Name = "44"
                         });
+                });
+
+            modelBuilder.Entity("CategoryProduct", b =>
+                {
+                    b.HasOne("ECFootBall.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECFootBall.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ECFootBall.Models.Category", b =>
+                {
+                    b.HasOne("ECFootBall.Models.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("ECFootBall.Models.Image", b =>
@@ -478,15 +574,7 @@ namespace ECFootBall.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECFootBall.Models.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Brand");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ECFootBall.Models.ProductVariant", b =>
@@ -507,7 +595,7 @@ namespace ECFootBall.Migrations
 
             modelBuilder.Entity("ECFootBall.Models.Category", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("ECFootBall.Models.Product", b =>
