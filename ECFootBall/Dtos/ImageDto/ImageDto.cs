@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ECFootBall.Models
+﻿
+namespace ECFootball.Product.API.Dtos.ImageDto
 {
-    public class Image
+    public class ImageDto
     {
-        public Guid Id {  get; set; }
+        public Guid Id { get; set; }
         public string? ProductId { get; set; }
 
         public string? UrlImage { get; set; }
@@ -17,7 +16,5 @@ namespace ECFootBall.Models
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
-        [ForeignKey("ProductId")]
-        public Product? Product { get; set; }
     }
 }
