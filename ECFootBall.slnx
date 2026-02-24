@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="ECFootBall/ECFootBall.csproj" />
+  <Folder Name="/Services/">
+    <Project Path="ECFootBall/ECFootBall.csproj" />
+  </Folder>
+  <Folder Name="/Shared/" />
 </Solution>
