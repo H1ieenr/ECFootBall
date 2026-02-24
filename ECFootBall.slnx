@@ -2,5 +2,7 @@
   <Folder Name="/Services/">
     <Project Path="ECFootBall/ECFootball.Product.API.csproj" />
   </Folder>
-  <Folder Name="/Shared/" />
+  <Folder Name="/Shared/">
+    <Project Path="ECFootball.Infrastructure.Shared/ECFootball.Infrastructure.Shared.csproj" />
+  </Folder>
 </Solution>
