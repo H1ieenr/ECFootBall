@@ -10,6 +10,7 @@ namespace ECFootBall.Models
         public decimal Price { get; set; }
         public decimal? PricePromotion { get; set; }
         public bool IsActive { get; set; }
+        public string? Avatar {  get; set; }
 
         public int BrandId { get; set; }
         [ForeignKey("BrandId")]
@@ -17,7 +18,7 @@ namespace ECFootBall.Models
 
         public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
-        public List<Image> Images { get; set; } = new();
+        public List<Image>? Images { get; set; } = new();
         public List<ProductVariant> Variants { get; set; }
 
 

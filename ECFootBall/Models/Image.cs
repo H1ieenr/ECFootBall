@@ -5,7 +5,7 @@ namespace ECFootBall.Models
     public class Image
     {
         public Guid Id {  get; set; }
-        public string ProductId { get; set; }
+        public string? ProductId { get; set; }
 
         public string? UrlImage { get; set; }
         public int? Position { get; set; }

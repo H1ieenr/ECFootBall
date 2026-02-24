@@ -13,6 +13,7 @@ namespace ECFootBall.Configurations
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IColorService, ColorService>();
+            services.AddScoped<ISizeService, SizeService>();
         }
 
     }
