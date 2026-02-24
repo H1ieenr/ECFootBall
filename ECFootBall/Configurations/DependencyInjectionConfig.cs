@@ -1,4 +1,6 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Infrastructure.Shared._Services.Interfaces;
+using ECFootball.Infrastructure.Shared._Services.Services;
+using ECFootBall._Service.Interfaces;
 using ECFootBall._Service.Services;
 
 namespace ECFootBall.Configurations
@@ -14,6 +16,8 @@ namespace ECFootBall.Configurations
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IColorService, ColorService>();
             services.AddScoped<ISizeService, SizeService>();
+
+            services.AddScoped<IFileService, FileService>();
         }
 
     }

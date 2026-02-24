@@ -12,7 +12,6 @@ namespace ECFootball.Infrastructure.Shared._Services.Services
 
         public FileService(IConfiguration config)
         {
-            // Lấy thông tin từ appsettings.json của project API
             var acc = new Account(
                 config["CloudinarySettings:CloudName"],
                 config["CloudinarySettings:ApiKey"],
