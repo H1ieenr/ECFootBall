@@ -9,10 +9,9 @@ namespace ECFootball.Infrastructure.Shared._Services.Services
     public class FileService : IFileService
     {
         private readonly Cloudinary _cloudinary;
-
+        private string folderProject = "ECFootball";
         public FileService(IConfiguration config)
         {
-            // Lấy thông tin từ appsettings.json của project API
             var acc = new Account(
                 config["CloudinarySettings:CloudName"],
                 config["CloudinarySettings:ApiKey"],
@@ -30,12 +29,33 @@ namespace ECFootball.Infrastructure.Shared._Services.Services
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    Folder = folderName,
+                    Folder = folderProject + folderName,
                     Transformation = new Transformation().Quality("auto").FetchFormat("auto")
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }
             return uploadResult;
+        }
+
+        public async Task<List<ImageUploadResult>> UploadMultipleImagesAsync(List<IFormFile> files, string folderName)
+        {
+            var uploadTasks = files
+                .Where(f => f.Length > 0)
+                .Select(file => UploadImageAsync(file, folderName)); 
+
+            var results = await Task.WhenAll(uploadTasks);
+
+            return results.ToList();
+        }
+
+        public async Task<ImageUploadResult> UpdateImageAsync(string oldPublicId, IFormFile newFile, string folderName)
+        {
+            if (!string.IsNullOrEmpty(oldPublicId))
+            {
+                await DeleteImageAsync(oldPublicId);
+            }
+
+            return await UploadImageAsync(newFile, folderName);
         }
 
         public async Task<DeletionResult> DeleteImageAsync(string publicId)
