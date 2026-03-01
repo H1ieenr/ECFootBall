@@ -1,10 +1,10 @@
-﻿using CloudinaryDotNet.Actions;
-using ECFootball.Infrastructure.Shared._Services.Interfaces;
+﻿using ECFootball.Infrastructure.Shared._Services.Interfaces;
 using ECFootball.Product.API._Service.Interfaces;
 using ECFootball.Product.API.Helpers.Mapper;
 using ECFootBall.Data;
 using ECFootBall.Dtos.ImageDto;
 using ECFootBall.Helpers.Utilities;
+using ECFootBall.Models;
 
 namespace ECFootball.Product.API._Service.Services
 {
@@ -22,10 +22,10 @@ namespace ECFootball.Product.API._Service.Services
         {
             try
             {
-                var uploadResult = await _fileService.UploadImageAsync(file, "Product");
+                var uploadResult = await _fileService.UploadImageAsync(file, $"Product/{dto.ProductId}");
                 if (uploadResult.Error != null) return new OperationResult() { Success = false, Message = "Upload Image error" };
 
-                var image = dto.MapToEntity();
+                Image image = dto.MapToEntity();
                 image.PublicId = uploadResult.PublicId;
                 image.UrlImage = uploadResult.SecureUrl.AbsoluteUri;
 
@@ -43,7 +43,7 @@ namespace ECFootball.Product.API._Service.Services
         {
             try
             {
-                var uploadResults = await _fileService.UploadMultipleImagesAsync(files, "Product");
+                var uploadResults = await _fileService.UploadMultipleImagesAsync(files, $"Product/{dto.ProductId}");
                 foreach (var result in uploadResults) 
                 { if (result.Error != null) return new OperationResult() { Success = false, Message = "Upload Image error" }; }
 
@@ -67,7 +67,7 @@ namespace ECFootball.Product.API._Service.Services
 
         public async Task<OperationResult> DeleteImageAsync(Guid imageId)
         {
-            var image = await _context.Images.FindAsync(imageId);
+            Image image = await _context.Images.FindAsync(imageId);
             if (image == null) return new OperationResult { Success = false, Message = "Image not found" };
 
             if (!string.IsNullOrEmpty(image.PublicId))

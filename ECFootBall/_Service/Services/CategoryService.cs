@@ -3,6 +3,7 @@ using ECFootBall.Data;
 using ECFootBall.Dtos.CategoryDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
+using ECFootBall.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECFootBall._Service.Services
@@ -17,7 +18,7 @@ namespace ECFootBall._Service.Services
 
         public async Task<CategoryDto> GetCategoryByIdAsync(int categoryId)
         {
-            var query = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == categoryId);
+            Category query = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == categoryId);
             return query?.MapToDto();
         }
 
@@ -42,7 +43,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var category = dto.MapToEntity();
+                Category category = dto.MapToEntity();
 
                 await _context.Categories.AddAsync(category);
                 await _context.SaveChangesAsync();
@@ -58,7 +59,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var category = await _context.Categories.FindAsync(CategoryId);
+                Category category = await _context.Categories.FindAsync(CategoryId);
                 if (category == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 category.MapDelete(deletedBy);
@@ -77,7 +78,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var category = await _context.Categories.FindAsync(dto.Id);
+                Category category = await _context.Categories.FindAsync(dto.Id);
                 if (category == null) return new OperationResult() { Success = false, Message = "No data" };
                 
                 dto.MapToEntity(category);

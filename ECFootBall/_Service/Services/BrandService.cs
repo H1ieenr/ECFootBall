@@ -3,6 +3,7 @@ using ECFootBall.Data;
 using ECFootBall.Dtos.BrandDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
+using ECFootBall.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECFootBall._Service.Services
@@ -19,7 +20,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var brand = dto.MapToEntity();
+                Brand brand = dto.MapToEntity();
 
                 await _context.Brands.AddAsync(brand);
                 await _context.SaveChangesAsync();
@@ -35,7 +36,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var brand = await _context.Brands.FindAsync(brandId);
+                Brand brand = await _context.Brands.FindAsync(brandId);
                 if (brand == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 brand.MapDelete(deletedBy);
@@ -52,7 +53,7 @@ namespace ECFootBall._Service.Services
 
         public async Task<BrandDto> GetBrandByIdAsync(int brandId)
         {
-            var query = await _context.Brands.AsNoTracking().FirstOrDefaultAsync(c => c.Id == brandId);
+            Brand query = await _context.Brands.AsNoTracking().FirstOrDefaultAsync(c => c.Id == brandId);
             return query?.MapToDto();
         }
 
@@ -77,7 +78,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var brand = await _context.Brands.FindAsync(dto.Id);
+                Brand brand = await _context.Brands.FindAsync(dto.Id);
                 if (brand == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 dto.MapToEntity(brand);

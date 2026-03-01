@@ -1,0 +1,54 @@
+﻿using ECFootball.Product.API._Service.Interfaces;
+using ECFootball.Product.API.Dtos.ProductDto;
+using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ECFootball.Product.API.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
+    public class ProductController : ControllerBase
+    {
+        private IProductService _productService;
+        public ProductController(IProductService productService) 
+        {
+            _productService = productService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchProductDto dto)
+        {
+            var result = await _productService.GetPagedProductsAsync(pagination, dto);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductByIdAsync(string id)
+        {
+            var result = await _productService.GetProductByIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
+        {
+            var result = await _productService.Create(dto);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateProductDto dto)
+        {
+            var result = await _productService.Update(dto);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _productService.Delete(id, "admin");
+            return Ok(result);
+        }
+
+    }
+}

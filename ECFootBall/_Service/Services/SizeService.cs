@@ -3,6 +3,7 @@ using ECFootBall.Data;
 using ECFootBall.Dtos.SizeDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
+using ECFootBall.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECFootBall._Service.Services
@@ -19,7 +20,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var size = dto.MapToEntity();
+                Size size = dto.MapToEntity();
 
                 await _context.Sizes.AddAsync(size);
                 await _context.SaveChangesAsync();
@@ -35,7 +36,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var size = await _context.Sizes.FindAsync(sizeId);
+                Size size = await _context.Sizes.FindAsync(sizeId);
                 if (size == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 size.MapDelete(deletedBy);
@@ -69,7 +70,7 @@ namespace ECFootBall._Service.Services
 
         public async Task<SizeDto> GetSizeByIdAsync(int sizeId)
         {
-            var query = await _context.Sizes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == sizeId);
+            Size query = await _context.Sizes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == sizeId);
             return query?.MapToDto();
         }
 
@@ -77,7 +78,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var size = await _context.Sizes.FindAsync(dto.Id);
+                Size size = await _context.Sizes.FindAsync(dto.Id);
                 if (size == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 dto.MapToEntity(size);

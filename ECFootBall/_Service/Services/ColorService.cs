@@ -3,6 +3,7 @@ using ECFootBall.Data;
 using ECFootBall.Dtos.ColorDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
+using ECFootBall.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECFootBall._Service.Services
@@ -19,7 +20,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var color = dto.MapToEntity();
+                Color color = dto.MapToEntity();
 
                 await _context.Colors.AddAsync(color);
                 await _context.SaveChangesAsync();
@@ -35,7 +36,7 @@ namespace ECFootBall._Service.Services
         {
             try
             {
-                var color = await _context.Colors.FindAsync(colorId);
+                Color color = await _context.Colors.FindAsync(colorId);
                 if (color == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 color.MapDelete(deletedBy);
@@ -52,7 +53,7 @@ namespace ECFootBall._Service.Services
 
         public async Task<ColorDto> GetColorByIdAsync(int colorId)
         {
-            var query = await _context.Colors.AsNoTracking().FirstOrDefaultAsync(c => c.Id == colorId);
+            Color query = await _context.Colors.AsNoTracking().FirstOrDefaultAsync(c => c.Id == colorId);
             return query?.MapToDto();
         }
 
@@ -78,7 +79,7 @@ namespace ECFootBall._Service.Services
 
             try
             {
-                var color = await _context.Colors.FindAsync(dto.Id);
+                Color color = await _context.Colors.FindAsync(dto.Id);
                 if (color == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 dto.MapToEntity(color);

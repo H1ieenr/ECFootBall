@@ -13,7 +13,7 @@ namespace ECFootBall.Configurations
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IColorService, ColorService>();
