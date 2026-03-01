@@ -9,7 +9,7 @@ namespace ECFootball.Infrastructure.Shared._Services.Services
     public class FileService : IFileService
     {
         private readonly Cloudinary _cloudinary;
-        private string folderProject = "ECFootball";
+        private string folderProject = "ECFootball/";
         public FileService(IConfiguration config)
         {
             var acc = new Account(
