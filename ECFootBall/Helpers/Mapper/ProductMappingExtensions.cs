@@ -24,6 +24,7 @@ namespace ECFootball.Product.API.Helpers.Mapper
 
         public static void MapToEntity(this UpdateProductDto dto, ECFootBall.Models.Product entity)
         {
+            entity.Id = dto.Id;
             entity.Name = dto.Name;
             entity.Description = dto.Description;
             entity.IsActive = dto.IsActive;
@@ -39,6 +40,8 @@ namespace ECFootball.Product.API.Helpers.Mapper
 
         public static ProductDto MapToDto(this ECFootBall.Models.Product entity)
         {
+            if (entity == null) return null;
+
             return new ProductDto
             {
                 Id = entity.Id,

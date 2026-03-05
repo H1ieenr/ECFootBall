@@ -3,6 +3,7 @@
     public class UpdateProductDto : CreateProductDto
     {
         public string Id { get; set; }
+        public List<string>? UrlImagesToDelete { get; set; }
         public string? UpdateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
     }
@@ -14,8 +15,8 @@
         public decimal Price { get; set; }
         public decimal? PricePromotion { get; set; }
         public bool IsActive { get; set; }
-        public required IFormFile FileAvatar { get; set; }
-        public List<IFormFile> FileImage { get; set; }
+        public IFormFile? FileAvatar { get; set; }
+        public List<IFormFile>? FileImage { get; set; }
 
         public bool? IsPromotion { get; set; }
         public int BrandId { get; set; }

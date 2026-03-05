@@ -1,10 +1,12 @@
 ﻿using ECFootball.Infrastructure.Shared._Services.Interfaces;
 using ECFootball.Product.API._Service.Interfaces;
+using ECFootball.Product.API.Dtos.ImageDto;
 using ECFootball.Product.API.Helpers.Mapper;
 using ECFootBall.Data;
 using ECFootBall.Dtos.ImageDto;
 using ECFootBall.Helpers.Utilities;
 using ECFootBall.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECFootball.Product.API._Service.Services
 {
@@ -65,9 +67,9 @@ namespace ECFootball.Product.API._Service.Services
             }
         }
 
-        public async Task<OperationResult> DeleteImageAsync(Guid imageId)
+        public async Task<OperationResult> DeleteImageAsync(string urlImage)
         {
-            Image image = await _context.Images.FindAsync(imageId);
+            Image image = await _context.Images.FirstOrDefaultAsync(i => i.UrlImage == urlImage);
             if (image == null) return new OperationResult { Success = false, Message = "Image not found" };
 
             if (!string.IsNullOrEmpty(image.PublicId))

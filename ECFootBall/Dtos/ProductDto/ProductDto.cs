@@ -1,4 +1,6 @@
 ﻿
+using ECFootBall.Dtos.BrandDto;
+
 namespace ECFootball.Product.API.Dtos.ProductDto
 {
     public class ProductDto
@@ -13,12 +15,12 @@ namespace ECFootball.Product.API.Dtos.ProductDto
 
         public int BrandId { get; set; }
         //[ForeignKey("BrandId")]
-        //public virtual Brand? Brand { get; set; }
+        public BrandDto? Brand { get; set; }
 
         //public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
-        //public List<Image>? Images { get; set; } = new();
-        //public List<ProductVariant> Variants { get; set; }
+        public List<ECFootball.Product.API.Dtos.ImageDto.ImageDto>? Images { get; set; }
+        public List<ECFootball.Product.API.Dtos.ProductVariantDto.ProductVariantDto> Variants { get; set; }
 
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
