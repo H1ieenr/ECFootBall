@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Services/">
+    <Project Path="ECFootball.Identity.API/ECFootball.Identity.API.csproj" Id="ae4f2608-b934-497c-9e22-bb7d45fa1002" />
     <Project Path="ECFootBall/ECFootball.Product.API.csproj" />
   </Folder>
   <Folder Name="/Shared/">

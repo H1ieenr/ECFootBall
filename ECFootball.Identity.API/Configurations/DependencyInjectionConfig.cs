@@ -1,0 +1,17 @@
+﻿using ECFootball.Infrastructure.Shared._Services.Interfaces;
+using ECFootball.Infrastructure.Shared._Services.Services;
+
+namespace ECFootball.Identity.API.Configurations
+{
+    public static class DependencyInjectionConfig
+    {
+        public static void AddDependencyInjectionConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
+
+            services.AddScoped<IFileService, FileService>();
+        }
+
+    }
+}
