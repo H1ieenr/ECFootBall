@@ -12,7 +12,7 @@ namespace ECFootBall.Helpers.Mapper
                 Name = dto.Name,
                 Description = dto.Description,
                 DisplayOrder = dto.DisplayOrder,
-                
+                //Avatar  = dto.Avatar,
                 CreateBy = dto.CreateBy,
                 CreateDate = DateTime.UtcNow,
                 IsActive = false,
@@ -26,7 +26,8 @@ namespace ECFootBall.Helpers.Mapper
             entity.Description = dto.Description;
             entity.DisplayOrder = dto.DisplayOrder;
             entity.IsActive = dto.IsActive;
-            
+            //entity.Avatar = dto.Avatar;
+
             entity.UpdateDate = DateTime.UtcNow;
             entity.UpdateBy = dto.UpdateBy;
         }
@@ -46,6 +47,7 @@ namespace ECFootBall.Helpers.Mapper
                 Products = entity.Products,
                 UpdateBy = entity.UpdateBy,
                 UpdateDate = entity.UpdateDate,
+                Avatar = entity.Avatar
             };
         }
 

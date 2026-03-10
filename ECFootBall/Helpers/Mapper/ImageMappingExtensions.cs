@@ -32,5 +32,16 @@ namespace ECFootball.Product.API.Helpers.Mapper
                 UpdateDate = entity.UpdateDate,
             };
         }
+
+        public static Image MapToEntity(this CreateImageObjectDto dto)
+        {
+            return new Image
+            {
+                Id = Guid.NewGuid(),
+                ObjectId = !string.IsNullOrEmpty(dto.ObjectId) ? dto.ObjectId : dto.ObjectName,
+                CreateBy = dto.CreateBy,
+                CreateDate = DateTime.UtcNow,
+            };
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace ECFootBall.Dtos.BrandDto
         public string? Description { get; set; }
         public bool IsActive { get; set; }
         public int? DisplayOrder { get; set; }
-
+        public IFormFile? FileAvatar { get; set; }
         public string? CreateBy { get; set; }
         public DateTime? CreateDate { get; set; }
     }

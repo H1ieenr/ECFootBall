@@ -4,6 +4,7 @@ using ECFootBall.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECFootBall.Migrations
 {
     [DbContext(typeof(ECFootBallDBContext))]
-    partial class ECFootBallDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260310064909_addFieldAvatarTableBrand")]
+    partial class addFieldAvatarTableBrand
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,9 +306,6 @@ namespace ECFootBall.Migrations
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ObjectId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Position")
                         .HasColumnType("int");

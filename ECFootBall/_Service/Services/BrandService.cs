@@ -1,6 +1,8 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Product.API._Service.Interfaces;
+using ECFootBall._Service.Interfaces;
 using ECFootBall.Data;
 using ECFootBall.Dtos.BrandDto;
+using ECFootBall.Dtos.ImageDto;
 using ECFootBall.Helpers.Mapper;
 using ECFootBall.Helpers.Utilities;
 using ECFootBall.Models;
@@ -11,9 +13,11 @@ namespace ECFootBall._Service.Services
     public class BrandService : IBrandService
     {
         private ECFootBallDBContext _context;
-        public BrandService(ECFootBallDBContext context) 
+        private IImageService _imageService;
+        public BrandService(ECFootBallDBContext context, IImageService imageService) 
         {
             _context = context;
+            _imageService = imageService;
         }
 
         public async Task<OperationResult> Create(CreateBrandDto dto)
@@ -21,7 +25,13 @@ namespace ECFootBall._Service.Services
             try
             {
                 Brand brand = dto.MapToEntity();
-
+                
+                if (dto.FileAvatar != null)
+                {
+                    CreateImageObjectDto imageDto = new CreateImageObjectDto { ObjectId = $"{brand.Name}", ObjectName = "Brand" };
+                    OperationResult resutlImage = await _imageService.AddImageToObjectAsync(imageDto, dto.FileAvatar);
+                    if (resutlImage.Success) { brand.Avatar = ((Image)resutlImage.Data).UrlImage; }
+                }
                 await _context.Brands.AddAsync(brand);
                 await _context.SaveChangesAsync();
                 return new OperationResult() { Success = true, Message = "Create Success" };
@@ -82,6 +92,18 @@ namespace ECFootBall._Service.Services
                 if (brand == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 dto.MapToEntity(brand);
+
+                if (dto.FileAvatar != null)
+                {
+                    CreateImageObjectDto imageDto = new CreateImageObjectDto { ObjectId = $"{brand.Name}", ObjectName = "Brand" };
+
+                    var resultImage = await _imageService.AddImageToObjectAsync(imageDto, dto.FileAvatar);
+                    if (resultImage.Success)
+                    {
+                        await _imageService.DeleteImageAsync(brand.Avatar);
+                        brand.Avatar = ((Image)resultImage.Data).UrlImage;
+                    }
+                }
                 _context.Brands.Update(brand);
                 await _context.SaveChangesAsync();
                 return new OperationResult() { Success = true, Message = "Update Success" };

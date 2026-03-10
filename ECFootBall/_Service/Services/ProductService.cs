@@ -1,5 +1,4 @@
 ﻿using ECFootball.Product.API._Service.Interfaces;
-using ECFootball.Product.API.Dtos.ImageDto;
 using ECFootball.Product.API.Dtos.ProductDto;
 using ECFootball.Product.API.Helpers.Mapper;
 using ECFootBall._Service.Interfaces;

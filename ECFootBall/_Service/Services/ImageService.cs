@@ -1,6 +1,5 @@
 ﻿using ECFootball.Infrastructure.Shared._Services.Interfaces;
 using ECFootball.Product.API._Service.Interfaces;
-using ECFootball.Product.API.Dtos.ImageDto;
 using ECFootball.Product.API.Helpers.Mapper;
 using ECFootBall.Data;
 using ECFootBall.Dtos.ImageDto;
@@ -85,6 +84,27 @@ namespace ECFootball.Product.API._Service.Services
             await _context.SaveChangesAsync();
 
             return new OperationResult { Success = true, Message = "Delete Success" };
+        }
+
+        public async Task<OperationResult> AddImageToObjectAsync(CreateImageObjectDto dto, IFormFile file)
+        {
+            try
+            {
+                var uploadResult = await _fileService.UploadImageAsync(file, $"{dto.ObjectName}/{dto.ObjectId}");
+                if (uploadResult.Error != null) return new OperationResult() { Success = false, Message = "Upload Image error" };
+
+                Image image = dto.MapToEntity();
+                image.PublicId = uploadResult.PublicId;
+                image.UrlImage = uploadResult.SecureUrl.AbsoluteUri;
+
+                _context.Images.Add(image);
+                await _context.SaveChangesAsync();
+                return new OperationResult() { Success = true, Data = image, Message = "Create Success" };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult() { Success = false, Message = ex.Message };
+            }
         }
     }
 }

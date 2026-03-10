@@ -10,7 +10,7 @@ namespace ECFootBall.Dtos.BrandDto
         public bool IsActive { get; set; }
         public int? DisplayOrder { get; set; }
         public virtual List<Product> Products { get; set; }
-
+        public string? Avatar { get; set; }
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
         public DateTime? CreateDate { get; set; }

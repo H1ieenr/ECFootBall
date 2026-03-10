@@ -30,14 +30,14 @@ namespace ECFootBall.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBrandDto dto)
+        public async Task<IActionResult> Create([FromForm] CreateBrandDto dto)
         {
             var result = await _brandService.Create(dto);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateBrandDto dto)
+        public async Task<IActionResult> Update([FromForm] UpdateBrandDto dto)
         {
             var result = await _brandService.Update(dto);
             return Ok(result);
