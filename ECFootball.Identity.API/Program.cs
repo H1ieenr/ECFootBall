@@ -1,3 +1,4 @@
+using ECFootball.Identity.API._Service.Interface;
 using ECFootball.Identity.API.Configurations;
 using ECFootball.Identity.API.Data;
 using ECFootball.Identity.API.Models;
@@ -45,20 +46,30 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
+    options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseHttpsRedirection();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var identityService = services.GetRequiredService<IIdentityService>();
+    await identityService.SeedRolesAsync();
+    await identityService.SeedAdminUserAsync();
+}
 
 app.Run();

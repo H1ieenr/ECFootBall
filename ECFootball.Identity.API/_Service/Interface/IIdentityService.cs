@@ -6,5 +6,8 @@ namespace ECFootball.Identity.API._Service.Interface
     public interface IIdentityService
     {
         Task<OperationResult> RegisterAsync(RegisterDto dto);
+        Task<OperationResult> LoginAsync(LoginDto dto);
+        Task SeedRolesAsync();
+        Task SeedAdminUserAsync();
     }
 }

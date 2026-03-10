@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ECFootball.Infrastructure.Shared\ECFootball.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
