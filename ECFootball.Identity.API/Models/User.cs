@@ -4,6 +4,7 @@ namespace ECFootball.Identity.API.Models
 {
     public class User : IdentityUser
     {
+        public string? UserCode { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? FullName => $"{FirstName} {LastName}";
@@ -21,7 +22,7 @@ namespace ECFootball.Identity.API.Models
         public DateTime CreatedDate { get; set; }
         public bool IsLoginGoogle { get; set; }
         public string? IdGoogle { get; set; }
-
+        public string? AvatarPublicId {  get; set; }
 
         public bool PhoneNumberIsVerified { get; set; }
         public string? CodeSMSVerify { get; set; }

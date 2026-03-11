@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,20 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("bearer", document)] = []
+    });
+});
 builder.Services.AddCors();
 builder.Services.AddAuthentication(options =>
 {
@@ -67,7 +81,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var identityService = services.GetRequiredService<IIdentityService>();
+    var identityService = services.GetRequiredService<ISeedDataService>();
     await identityService.SeedRolesAsync();
     await identityService.SeedAdminUserAsync();
 }

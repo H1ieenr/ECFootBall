@@ -10,6 +10,7 @@ namespace ECFootball.Identity.API.Configurations
         public static void AddDependencyInjectionConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            services.AddScoped<ISeedDataService, SeedDataService>();
             services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddScoped<IFileService, FileService>();
