@@ -1,13 +1,15 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Product.API.Controllers.Base;
+using ECFootBall._Service.Interfaces;
 using ECFootBall.Dtos.ColorDto;
 using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECFootBall.Controllers
 {
     [Route("api/colors")]
     [ApiController]
-    public class ColorController : ControllerBase
+    public class ColorController : BaseManagementController
     {
         private readonly IColorService _colorService;
         public ColorController(IColorService colorService)
@@ -16,6 +18,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchColorDto dto)
         {
             var result = await _colorService.GetPagedColorsAsync(pagination, dto);

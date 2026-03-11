@@ -1,14 +1,16 @@
 ﻿using ECFootball.Product.API._Service.Interfaces;
+using ECFootball.Product.API.Controllers.Base;
 using ECFootball.Product.API.Dtos.ProductVariantDto;
 using ECFootBall.Dtos.ProductVariantDto;
 using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECFootball.Product.API.Controllers
 {
     [Route("api/productVariant")]
     [ApiController]
-    public class ProductVariantController : ControllerBase
+    public class ProductVariantController : BaseManagementController
     {
         private IProductVariantService _productVariantService;
         public ProductVariantController(IProductVariantService productVariantService)
@@ -17,6 +19,7 @@ namespace ECFootball.Product.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchProductVariantDto dto)
         {
             var result = await _productVariantService.GetPagedProductVariantsAsync(pagination, dto);
@@ -24,6 +27,7 @@ namespace ECFootball.Product.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductVariantByIdAsync(int id)
         {
             var result = await _productVariantService.GetProductVariantByIdAsync(id);

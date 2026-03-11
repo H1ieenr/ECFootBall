@@ -1,13 +1,15 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Product.API.Controllers.Base;
+using ECFootBall._Service.Interfaces;
 using ECFootBall.Dtos.SizeDto;
 using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECFootBall.Controllers
 {
     [Route("api/sizes")]
     [ApiController]
-    public class SizeController : ControllerBase
+    public class SizeController : BaseManagementController
     {
         private readonly ISizeService _sizeService;
         public SizeController(ISizeService sizeService)
@@ -16,6 +18,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchSizeDto dto)
         {
             var result = await _sizeService.GetPagedSizesAsync(pagination, dto);

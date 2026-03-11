@@ -1,13 +1,15 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Product.API.Controllers.Base;
+using ECFootBall._Service.Interfaces;
 using ECFootBall.Dtos.CategoryDto;
 using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECFootBall.Controllers
 {
     [Route("api/categories")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController : BaseManagementController
     {
         private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)
@@ -16,6 +18,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchCategoryDto dto)
         {
             var result = await _categoryService.GetPagedCategoriesAsync(pagination, dto);

@@ -1,13 +1,15 @@
-﻿using ECFootBall._Service.Interfaces;
+﻿using ECFootball.Product.API.Controllers.Base;
+using ECFootBall._Service.Interfaces;
 using ECFootBall.Dtos.BrandDto;
 using ECFootBall.Helpers.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECFootBall.Controllers
 {
     [Route("api/brands")]
     [ApiController]
-    public class BrandController : ControllerBase
+    public class BrandController : BaseManagementController
     {
         private readonly IBrandService _brandService;
         public BrandController(IBrandService brandService)
@@ -16,6 +18,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPagedAsync([FromQuery] PaginationParam pagination, [FromQuery] SearchBrandDto dto)
         {
             var result = await _brandService.GetPagedBrandsAsync(pagination, dto);
@@ -30,6 +33,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromForm] CreateBrandDto dto)
         {
             var result = await _brandService.Create(dto);
@@ -37,6 +41,7 @@ namespace ECFootBall.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromForm] UpdateBrandDto dto)
         {
             var result = await _brandService.Update(dto);
