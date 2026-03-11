@@ -36,6 +36,7 @@ namespace ECFootBall.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromForm] CreateBrandDto dto)
         {
+            dto.CreateBy = CurrentUserId;
             var result = await _brandService.Create(dto);
             return Ok(result);
         }
@@ -44,6 +45,7 @@ namespace ECFootBall.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromForm] UpdateBrandDto dto)
         {
+            dto.UpdateBy = CurrentUserId;
             var result = await _brandService.Update(dto);
             return Ok(result);
         }
@@ -51,7 +53,7 @@ namespace ECFootBall.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _brandService.Delete(id, "admin");
+            var result = await _brandService.Delete(id, CurrentUserId);
             return Ok(result);
         }
     }

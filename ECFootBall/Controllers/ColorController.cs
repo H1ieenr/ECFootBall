@@ -35,6 +35,7 @@ namespace ECFootBall.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateColorDto dto)
         {
+            dto.CreateBy = CurrentUserId;
             var result = await _colorService.Create(dto);
             return Ok(result);
         }
@@ -42,6 +43,7 @@ namespace ECFootBall.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateColorDto dto)
         {
+            dto.UpdateBy = CurrentUserId;
             var result = await _colorService.Update(dto);
             return Ok(result);
         }
@@ -49,7 +51,7 @@ namespace ECFootBall.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _colorService.Delete(id, "admin");
+            var result = await _colorService.Delete(id, CurrentUserId);
             return Ok(result);
         }
     }

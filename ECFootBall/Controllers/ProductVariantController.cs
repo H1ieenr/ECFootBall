@@ -37,6 +37,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductVariantDto dto)
         {
+            dto.CreateBy = CurrentUserId;
             var result = await _productVariantService.Create(dto);
             return Ok(result);
         }
@@ -44,6 +45,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateProductVariantDto dto)
         {
+            dto.UpdateBy = CurrentUserId;
             var result = await _productVariantService.Update(dto);
             return Ok(result);
         }
@@ -51,13 +53,14 @@ namespace ECFootball.Product.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _productVariantService.Delete(id, "admin");
+            var result = await _productVariantService.Delete(id, CurrentUserId);
             return Ok(result);
         }
 
         [HttpPost("Create-Range")]
         public async Task<IActionResult> CreateRange([FromBody] List<CreateProductVariantDto> dtos)
         {
+            dtos.ForEach(x => x.CreateBy = CurrentUserId);
             var result = await _productVariantService.CreateRange(dtos);
             return Ok(result);
         }
@@ -65,6 +68,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpPut("Update-Range")]
         public async Task<IActionResult> UpdateRange([FromBody] List<UpdateProductVariantDto> dtos)
         {
+            dtos.ForEach(x => x.UpdateBy = CurrentUserId);
             var result = await _productVariantService.UpdateRange(dtos);
             return Ok(result);
         }
@@ -72,7 +76,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpDelete("Delete-Range")]
         public async Task<IActionResult> DeleteRange([FromBody] List<int> ids)
         {
-            var result = await _productVariantService.DeleteRange(ids, "admin");
+            var result = await _productVariantService.DeleteRange(ids, CurrentUserId);
             return Ok(result);
         }
     }

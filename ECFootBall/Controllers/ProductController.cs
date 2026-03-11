@@ -36,6 +36,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
+            dto.CreateBy = CurrentUserId;
             var result = await _productService.Create(dto);
             return Ok(result);
         }
@@ -43,6 +44,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateProductDto dto)
         {
+            dto.UpdateBy = CurrentUserId;
             var result = await _productService.Update(dto);
             return Ok(result);
         }
@@ -50,7 +52,7 @@ namespace ECFootball.Product.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _productService.Delete(id, "admin");
+            var result = await _productService.Delete(id, CurrentUserId);
             return Ok(result);
         }
 
