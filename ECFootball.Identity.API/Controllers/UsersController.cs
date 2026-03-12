@@ -64,5 +64,14 @@ namespace ECFootball.Identity.API.Controllers
             var result = await _identityService.GetUserByIdAsync(id);
             return Ok(result);
         }
+
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            dto.UserId = CurrentUserId;
+            var result = await _identityService.ChangePasswordAsync(dto);
+            return Ok(result);
+        }
     }
 }

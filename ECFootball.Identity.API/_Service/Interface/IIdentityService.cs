@@ -9,6 +9,7 @@ namespace ECFootball.Identity.API._Service.Interface
         Task<OperationResult> RegisterAsync(RegisterDto dto);
         Task<OperationResult> LoginAsync(LoginDto dto);
         Task<OperationResult> UpdateAsync(UpdateUserDto dto);
+        Task<OperationResult> ChangePasswordAsync(ChangePasswordDto dto);
         Task<OperationResult> DeleteAsync(string userId, string deletedBy);
         Task<UserDto> GetUserByIdAsync(string userId);
         Task<PaginationUtility<UserDto>> GetPagedUsersAsync(PaginationParam pagination, SearchUserDto searchDto, bool isPaging = true);

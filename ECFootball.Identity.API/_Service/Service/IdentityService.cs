@@ -145,7 +145,23 @@ namespace ECFootball.Identity.API._Service.Service
                 return new OperationResult() { Success = false, Message = ex.Message };
             }
         }
+        public async Task<OperationResult> ChangePasswordAsync(ChangePasswordDto dto)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(dto.UserId);
+                if (user == null) return new OperationResult { Success = false, Message = "User not found" };
 
+                var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
+
+                if (result.Succeeded) return new OperationResult { Success = true, Message = "Password changed successfully" };
+                return new OperationResult { Success = false, Message = result.Errors.ToString() };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult() { Success = false, Message = ex.Message };
+            }
+        }
         private string GenerateJwtToken(User user, IList<string> roles)
         {
             var claims = new List<Claim>
