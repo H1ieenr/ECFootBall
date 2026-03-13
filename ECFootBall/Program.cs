@@ -1,5 +1,7 @@
+using ECFootball.Product.API._Service.Services;
 using ECFootBall.Configurations;
 using ECFootBall.Data;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +57,21 @@ builder.Services.AddAuthentication(options => {
     };
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<OrderCreatedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitConfig = builder.Configuration.GetSection("RabbitMQ");
+        cfg.Host(rabbitConfig["Host"], "/", h => {
+            h.Username(rabbitConfig["UserName"]);
+            h.Password(rabbitConfig["Password"]);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
