@@ -10,6 +10,7 @@ namespace ECFootball.Order.API.Configurations
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
         }
     }
 }

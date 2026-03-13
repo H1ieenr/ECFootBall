@@ -1,6 +1,6 @@
-﻿namespace ECFootball.Order.API.Models
+﻿namespace ECFootball.Order.API.Dtos.OrderDto
 {
-    public class OrderItem
+    public class OrderItemDto
     {
         public Guid Id { get; set; }
         public Guid OrderId { get; set; }
@@ -9,6 +9,5 @@
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public string Avatar { get; set; }
-        public Order Order { get; set; }
     }
 }

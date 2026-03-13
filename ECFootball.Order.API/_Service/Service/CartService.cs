@@ -96,14 +96,49 @@ namespace ECFootball.Order.API._Service.Service
                 return new OperationResult { Success = false, Message = ex.Message };
             }
         }
-        public Task<OperationResult> ClearCartAsync(string userId)
+        public async Task<OperationResult> ClearCartAsync(string userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Cart cart = await _context.Carts.FirstOrDefaultAsync(x => x.UserId == userId);
+                if (cart == null) return new OperationResult { Success = false, Message = "Cart no data" }; 
+
+
+                await _context.CartItems.Where(x => x.Cart.UserId == userId).ExecuteDeleteAsync();
+
+                cart.LastUpdate = DateTime.Now;
+                _context.Carts.Update(cart);
+                await _context.SaveChangesAsync();
+                return new OperationResult { Success = true, Message = "Cart synchronized successfully!" };
+            }
+            catch (Exception ex) 
+            {
+                return new OperationResult { Success = false, Message = ex.Message };
+            }
         }
 
-        public Task<OperationResult> RemoveFromCartAsync(string userId, Guid productId)
+        public async  Task<OperationResult> RemoveFromCartAsync(string userId, string productId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Cart cart = await _context.Carts.FirstOrDefaultAsync(x => x.UserId == userId);
+                if (cart == null) return new OperationResult { Success = false, Message = "Cart no data" }; 
+
+                var item = await _context.CartItems.FirstOrDefaultAsync(x => x.Cart.UserId == userId && x.ProductId == productId);
+                if (item == null)return new OperationResult { Success = false, Message = "Item not found" };
+
+                cart.LastUpdate = DateTime.Now;
+
+                _context.CartItems.Remove(item);
+                _context.Carts.Update(cart);
+                await _context.SaveChangesAsync();
+
+                return new OperationResult { Success = true, Message = "Cart synchronized successfully!" };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult { Success = false, Message = ex.Message };
+            }
         }
 
         public async Task<CartDto> GetCartAsync(string userId)

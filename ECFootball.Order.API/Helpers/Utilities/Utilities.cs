@@ -2,16 +2,11 @@
 {
     public static class Utilities
     {
-        public static string GenerateProductId(string brandName, string nameProduct)
+        public static string GenerateOrderCode()
         {
-            var initials = string.Concat(nameProduct
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Select(word => word[0]))
-                .ToUpper();
-
             var random = new Random();
             var randomNumber = random.Next(100000, 999999);
-            return $"{brandName.ToUpper()}-{initials}{randomNumber}";
+            return $"{"ORECF"}-{randomNumber}";
         }
 
         public enum OrderStatus

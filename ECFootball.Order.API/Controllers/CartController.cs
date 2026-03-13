@@ -2,7 +2,6 @@
 using ECFootball.Order.API.Controllers.Base;
 using ECFootball.Order.API.Dtos.CartDto;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml;
 
 namespace ECFootball.Order.API.Controllers
 {
@@ -35,6 +34,20 @@ namespace ECFootball.Order.API.Controllers
         public async Task<IActionResult> SyncCart([FromBody] List<CartItemDto> items)
         {
             var result = await _cartService.SyncCartAsync(CurrentUserId, items);
+            return Ok(result);
+        }
+
+        [HttpDelete("remove-item/{productId}")]
+        public async Task<IActionResult> RemoveFromCartAsync(string productId) 
+        {
+            var result = await _cartService.RemoveFromCartAsync(CurrentUserId, productId);
+            return Ok(result);
+        }
+
+        [HttpDelete("clear")]
+        public async Task<IActionResult> ClearCartAsync() 
+        {
+            var result = await _cartService.ClearCartAsync(CurrentUserId);
             return Ok(result);
         }
     }
