@@ -7,6 +7,8 @@ namespace ECFootball.Order.API.Dtos.CartDto
         internal string? UserId { get; set; }
         internal Guid? GuestId { get; set; }
         public string? ProductId { get; set; }
+        public string SizeId { get; set; }
+        public string ColorId { get; set; }
         public int? Quantity { get; set; }
     }
 }

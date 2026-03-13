@@ -7,6 +7,8 @@ namespace ECFootball.Order.API.Models
         public Guid Id { get; set; }
         public Guid CartId { get; set; }
         public string ProductId { get; set; }
+        public string SizeId { get; set; }
+        public string ColorId { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "The number must be greater than 0.")]
         public int Quantity { get; set; }
 

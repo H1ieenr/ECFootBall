@@ -37,10 +37,11 @@ namespace ECFootball.Order.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("remove-item/{productId}")]
-        public async Task<IActionResult> RemoveFromCartAsync(string productId) 
+        [HttpDelete("remove-item")]
+        public async Task<IActionResult> RemoveFromCartAsync([FromBody] RemoveFromCartDto dto) 
         {
-            var result = await _cartService.RemoveFromCartAsync(CurrentUserId, productId);
+            dto.UserId = CurrentUserId;
+            var result = await _cartService.RemoveFromCartAsync(dto);
             return Ok(result);
         }
 

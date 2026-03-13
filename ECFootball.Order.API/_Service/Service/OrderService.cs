@@ -3,6 +3,8 @@ using ECFootball.Order.API.Data;
 using ECFootball.Order.API.Dtos.OrderDto;
 using ECFootball.Order.API.Helpers.Mapper;
 using ECFootball.Order.API.Helpers.Utilities;
+using ECFootball.Order.API.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECFootball.Order.API._Service.Service
@@ -12,11 +14,13 @@ namespace ECFootball.Order.API._Service.Service
         private ECFootBallOrderDBContext _context;
         private IProductClient _productClient;
         private ICartService _cartService;
-        public OrderService(ECFootBallOrderDBContext context, IProductClient productClient, ICartService cartService)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public OrderService(ECFootBallOrderDBContext context, IProductClient productClient, ICartService cartService, IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _productClient = productClient;
             _cartService = cartService;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<OrderDto> GetOrderDetailAsync(string orderCode)
@@ -77,6 +81,7 @@ namespace ECFootball.Order.API._Service.Service
                 await _cartService.ClearCartAsync(order.UserId);
 
                 await transaction.CommitAsync();
+                //await InventoryUpdate(order);
                 return new OperationResult { Success = true, Message = "Order created successfully", Data = order.OrderCode };
             }
             catch (Exception ex)
@@ -85,5 +90,21 @@ namespace ECFootball.Order.API._Service.Service
                 return new OperationResult { Success = false, Message = ex.Message };
             }
         }
+
+        //public async Task InventoryUpdate(ECFootball.Order.API.Models.Order order)
+        //{
+        //    var stockEvent = new OrderCreatedEvent
+        //    {
+        //        OrderId = order.Id,
+        //        Items = order.OrderItems.Select(x => new OrderItemStockDto
+        //        {
+        //            ProductId = x.ProductId,
+        //            Quantity = x.Quantity,
+        //            SizeId = x.
+        //        }).ToList()
+        //    };
+
+        //    await _publishEndpoint.Publish(stockEvent);
+        //}
     }
 }

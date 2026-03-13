@@ -2,6 +2,7 @@ using ECFootball.Order.API._Service.Interface;
 using ECFootball.Order.API._Service.Service;
 using ECFootball.Order.API.Configurations;
 using ECFootball.Order.API.Data;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -60,6 +61,18 @@ builder.Services.AddHttpClient<IProductClient, ProductClient>(client =>
     client.BaseAddress = new Uri(builder.Configuration["ExternalServices:ProductApi"]);
 })
 .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitConfig = builder.Configuration.GetSection("RabbitMQ");
+        cfg.Host(rabbitConfig["Host"], "/", h => {
+            h.Username(rabbitConfig["UserName"]);
+            h.Password(rabbitConfig["Password"]);
+        });
+    });
+});
 
 var app = builder.Build();
 

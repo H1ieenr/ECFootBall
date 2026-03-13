@@ -40,6 +40,8 @@ namespace ECFootball.Order.API._Service.Service
                     {
                         CartId = cart.Id,
                         ProductId = dto.ProductId,
+                        SizeId = dto.SizeId,
+                        ColorId = dto.ColorId,
                         Quantity = (int)dto.Quantity
                     });
                 }
@@ -81,6 +83,8 @@ namespace ECFootball.Order.API._Service.Service
                         {
                             CartId = cart.Id,
                             ProductId = anonItem.ProductId,
+                            ColorId = anonItem.ColorId,
+                            SizeId = anonItem.SizeId,
                             Quantity = (int)anonItem.Quantity
                         });
                     }
@@ -117,14 +121,14 @@ namespace ECFootball.Order.API._Service.Service
             }
         }
 
-        public async  Task<OperationResult> RemoveFromCartAsync(string userId, string productId)
+        public async  Task<OperationResult> RemoveFromCartAsync(RemoveFromCartDto dto)
         {
             try
             {
-                Cart cart = await _context.Carts.FirstOrDefaultAsync(x => x.UserId == userId);
+                Cart cart = await _context.Carts.FirstOrDefaultAsync(x => x.UserId == dto.UserId);
                 if (cart == null) return new OperationResult { Success = false, Message = "Cart no data" }; 
 
-                var item = await _context.CartItems.FirstOrDefaultAsync(x => x.Cart.UserId == userId && x.ProductId == productId);
+                var item = await _context.CartItems.FirstOrDefaultAsync(x => x.Cart.UserId == dto.UserId && x.ProductId == dto.ProductId && x.ColorId == dto.ColorId && x.SizeId == dto.SizeId);
                 if (item == null)return new OperationResult { Success = false, Message = "Item not found" };
 
                 cart.LastUpdate = DateTime.Now;

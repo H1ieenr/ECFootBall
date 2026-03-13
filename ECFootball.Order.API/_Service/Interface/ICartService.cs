@@ -8,7 +8,7 @@ namespace ECFootball.Order.API._Service.Interface
         Task<OperationResult> AddToCartAsync(AddToCartDto dto);
         Task<OperationResult> SyncCartAsync(string userId, List<CartItemDto> anonymousItems);
         Task<CartDto> GetCartAsync(string userId);
-        Task<OperationResult> RemoveFromCartAsync(string userId, string productId);
+        Task<OperationResult> RemoveFromCartAsync(RemoveFromCartDto dto);
         Task<OperationResult> ClearCartAsync(string userId);
     }
 }
