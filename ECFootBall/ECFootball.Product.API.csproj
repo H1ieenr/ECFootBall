@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="9.0.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
+
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
@@ -30,7 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECFootball.Infrastructure.Shared\ECFootball.Infrastructure.Shared.csproj" />
+    <ProjectReference
+      Include="..\ECFootball.Infrastructure.Shared\ECFootball.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
 </Project>
