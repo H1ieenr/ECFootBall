@@ -1,5 +1,6 @@
 ﻿using ECFootball.Product.API._Service.Interfaces;
 using ECFootball.Product.API.Dtos.ProductDto;
+using ECFootball.Product.API.Dtos.ProductVariantDto;
 using ECFootball.Product.API.Helpers.Mapper;
 using ECFootBall._Service.Interfaces;
 using ECFootBall.Data;
@@ -29,7 +30,7 @@ namespace ECFootball.Product.API._Service.Services
             try
             {
                 var brand = await _brandService.GetBrandByIdAsync(dto.BrandId);
-                if(brand == null) return new OperationResult() { Success = false, Message = "No data Brand" };
+                if (brand == null) return new OperationResult() { Success = false, Message = "No data Brand" };
                 else dto.BrandName = brand.Name;
 
                 var product = dto.MapToEntity();
@@ -37,11 +38,12 @@ namespace ECFootball.Product.API._Service.Services
                 await _context.SaveChangesAsync();
 
                 CreateImageDto imageDto = new CreateImageDto { ProductId = product.Id };
-                if (dto.FileAvatar != null) {
+                if (dto.FileAvatar != null)
+                {
                     OperationResult resutlImage = await _imageService.AddImageToProductAsync(imageDto, dto.FileAvatar);
-                    if (resutlImage.Success){product.Avatar = ((Image)resutlImage.Data).UrlImage;}
+                    if (resutlImage.Success) { product.Avatar = ((Image)resutlImage.Data).UrlImage; }
                 }
-                if (dto.FileImage.Count > 0) { await _imageService.AddMultipleImagesToProductAsync(imageDto, dto.FileImage);}
+                if (dto.FileImage.Count > 0) { await _imageService.AddMultipleImagesToProductAsync(imageDto, dto.FileImage); }
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return new OperationResult() { Success = true, Message = "Create Success" };
@@ -93,8 +95,39 @@ namespace ECFootball.Product.API._Service.Services
 
         public async Task<ProductDto> GetProductByIdAsync(string ProductId)
         {
-            var query = await _context.Products.AsNoTracking().FirstOrDefaultAsync(c => c.Id == ProductId);
-            return query?.MapToDto();
+            var product = await _context.Products.AsNoTracking()
+                       .Where(p => p.Id == ProductId)
+                       .Select(p => new ProductDto
+                       {
+                           Id = p.Id,
+                           Name = p.Name,
+                           Description = p.Description,
+                           CreateBy = p.CreateBy,
+                           CreateDate = p.CreateDate,
+                           IsActive = p.IsActive,
+                           IsDelete = p.IsDelete,
+                           UpdateBy = p.UpdateBy,
+                           UpdateDate = p.UpdateDate,
+                           AmountReview = p.AmountReview,
+                           Avatar = p.Avatar,
+                           Price = p.Price,
+                           PricePromotion = p.PricePromotion,
+                           BrandId = p.BrandId,
+                           BrandName = p.Brand.Name,
+                           IsPromotion = p.IsPromotion,
+                           Variants = p.Variants.Select(v => new ProductVariantDto
+                           {
+                               Id = v.Id,
+                               SizeId = v.SizeId,
+                               SizeName = _context.Sizes.FirstOrDefault(s => s.Id.ToString() == v.SizeId).Name,
+                               ColorId = v.ColorId,
+                               ColorName = _context.Colors.FirstOrDefault(c => c.Id.ToString() == v.ColorId).Name,
+                               StockQuantity = v.StockQuantity
+                           }).ToList(),
+                           Images = string.Join("|", p.Images.Select(i => i.UrlImage))
+                       })
+                     .FirstOrDefaultAsync();
+            return product;
         }
 
         public async Task<OperationResult> Update(UpdateProductDto dto)
@@ -117,13 +150,13 @@ namespace ECFootball.Product.API._Service.Services
                     var resultImage = await _imageService.AddImageToProductAsync(imageDto, dto.FileAvatar);
                     if (resultImage.Success)
                     {
-                        var resultDelImage = await _imageService.DeleteImageAsync(product.Avatar);
-                        if (resultDelImage.Success){product.Avatar = ((Image)resultImage.Data).UrlImage;}
+                        await _imageService.DeleteImageAsync(product.Avatar);
+                        product.Avatar = ((Image)resultImage.Data).UrlImage;
                     }
                 }
 
-                if (dto.UrlImagesToDelete?.Count > 0) { foreach (var urlImage in dto.UrlImagesToDelete){await _imageService.DeleteImageAsync(urlImage);}}
-                if (dto.FileImage?.Count > 0){await _imageService.AddMultipleImagesToProductAsync(imageDto, dto.FileImage);}
+                if (dto.UrlImagesToDelete?.Count > 0) { foreach (var urlImage in dto.UrlImagesToDelete) { await _imageService.DeleteImageAsync(urlImage); } }
+                if (dto.FileImage?.Count > 0) { await _imageService.AddMultipleImagesToProductAsync(imageDto, dto.FileImage); }
 
                 _context.Products.Update(product);
                 await _context.SaveChangesAsync();

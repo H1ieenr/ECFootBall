@@ -42,7 +42,7 @@ namespace ECFootball.Product.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateProductDto dto)
+        public async Task<IActionResult> Update([FromForm] UpdateProductDto dto)
         {
             dto.UpdateBy = CurrentUserId;
             var result = await _productService.Update(dto);

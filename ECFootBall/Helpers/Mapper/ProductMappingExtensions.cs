@@ -58,7 +58,10 @@ namespace ECFootball.Product.API.Helpers.Mapper
                 Price = entity.Price,
                 PricePromotion = entity.PricePromotion,
                 BrandId = entity.BrandId,
+                BrandName = entity.Brand?.Name,
                 IsPromotion = entity.IsPromotion,
+                Images = string.Join("|", entity.Images?.Select(i => i.UrlImage) ?? new List<string>()),
+                Variants = entity.Variants?.Select(v => v.MapToDto()).ToList()
             };
         }
 

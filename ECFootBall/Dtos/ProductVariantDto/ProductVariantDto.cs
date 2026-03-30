@@ -6,7 +6,9 @@ namespace ECFootball.Product.API.Dtos.ProductVariantDto
         public int Id { get; set; }
         public string ProductId { get; set; }
         public string SizeId { get; set; } 
+        public string SizeName { get; set; }
         public string ColorId { get; set; }
+        public string ColorName { get; set; }
         public int StockQuantity { get; set; }
 
         public string? CreateBy { get; set; }
@@ -15,4 +17,5 @@ namespace ECFootball.Product.API.Dtos.ProductVariantDto
         public DateTime? UpdateDate { get; set; }
         public bool? IsDelete { get; set; }
     }
+    
 }

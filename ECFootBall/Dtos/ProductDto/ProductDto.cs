@@ -12,15 +12,10 @@ namespace ECFootball.Product.API.Dtos.ProductDto
         public decimal? PricePromotion { get; set; }
         public bool IsActive { get; set; }
         public string? Avatar { get; set; }
-
         public int BrandId { get; set; }
-        //[ForeignKey("BrandId")]
-        public BrandDto? Brand { get; set; }
-
-        //public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
-
-        public List<ECFootball.Product.API.Dtos.ImageDto.ImageDto>? Images { get; set; }
-        public List<ECFootball.Product.API.Dtos.ProductVariantDto.ProductVariantDto> Variants { get; set; }
+        public string BrandName { get; set; }
+        public string Images { get; set; }
+        public List<ProductVariantDto.ProductVariantDto> Variants { get; set; }
 
         public string? CreateBy { get; set; }
         public string? UpdateBy { get; set; }
