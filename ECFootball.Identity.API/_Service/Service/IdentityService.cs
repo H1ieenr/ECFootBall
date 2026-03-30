@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
+
 using static ECFootball.Identity.API.Helpers.Utilities.PagingnationUtility;
 
 namespace ECFootball.Identity.API._Service.Service
@@ -20,12 +22,15 @@ namespace ECFootball.Identity.API._Service.Service
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IFileService _fileService;
-        public IdentityService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IFileService fileService)
+        private readonly RedisCacheService _cache;
+        public IdentityService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
+        IConfiguration configuration, IFileService fileService, RedisCacheService cache)
         {
-            _userManager = userManager; 
+            _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _fileService = fileService;
+            _cache = cache;
         }
 
         public async Task<OperationResult> RegisterAsync(RegisterDto dto)
@@ -35,7 +40,7 @@ namespace ECFootball.Identity.API._Service.Service
                 User user = dto.MapToEntity();
 
                 var result = await _userManager.CreateAsync(user, dto.Password);
-                if (result.Succeeded) 
+                if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "Customer");
                     return new OperationResult { Success = true, Message = "Register Success" };
@@ -64,14 +69,49 @@ namespace ECFootball.Identity.API._Service.Service
                 if (!isPasswordValid) return new OperationResult { Success = false, Message = "Incorrect password" };
 
                 var roles = await _userManager.GetRolesAsync(user);
-                var token = GenerateJwtToken(user, roles);
+                var authRes = new AuthResponseDto
+                {
+                    AccessToken = GenerateJwtToken(user, roles),
+                    RefreshToken = GenerateRefreshToken(),
+                    AccessTokenExpiration = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:DurationInMinutes"]))
+                };
 
-                return new OperationResult { Success = true, Message = "Login Success", Data = token };
+                var cacheKey = $"RefreshToken:{user.Id}";
+                await _cache.SetCacheAsync(cacheKey, authRes.RefreshToken, TimeSpan.FromDays(7));
+                return new OperationResult { Success = true, Message = "Login Success", Data = authRes };
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new OperationResult() { Success = false, Message = ex.Message };
             }
+        }
+
+        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto request)
+        {
+            var userId = GetUserIdFromToken(request.AccessToken);
+
+            var cacheKey = $"RefreshToken:{userId}";
+            var savedRefreshToken = await _cache.GetCacheAsync<string>(cacheKey);
+
+            if (string.IsNullOrEmpty(savedRefreshToken) || savedRefreshToken != request.RefreshToken)
+            {
+                return new AuthResponseDto { AccessToken = null, RefreshToken = null, AccessTokenExpiration = DateTime.MinValue };
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var newAccessToken = GenerateJwtToken(user, roles);
+            var newRefreshToken = GenerateRefreshToken();
+
+            await _cache.SetCacheAsync(cacheKey, newRefreshToken, TimeSpan.FromDays(7));
+
+            return new AuthResponseDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+                AccessTokenExpiration = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:DurationInMinutes"]))
+            };
         }
 
         public async Task<UserDto> GetUserByIdAsync(string userId)
@@ -114,15 +154,15 @@ namespace ECFootball.Identity.API._Service.Service
                 {
                     var uploadResult = await _fileService.UploadImageAsync(dto.FileAvatar, $"User/{dto.UserCode}");
                     if (uploadResult.Error != null) return new OperationResult() { Success = false, Message = "Upload Image error" };
-                    if(user.AvatarPublicId != null) await _fileService.DeleteImageAsync(user.AvatarPublicId);
+                    if (user.AvatarPublicId != null) await _fileService.DeleteImageAsync(user.AvatarPublicId);
 
                     user.AvatarPublicId = uploadResult.PublicId;
                     user.Avatar = uploadResult.SecureUrl.AbsoluteUri;
                 }
                 await _userManager.UpdateAsync(user);
-                return new OperationResult { Success = true, Message = "Update Success"};
+                return new OperationResult { Success = true, Message = "Update Success" };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new OperationResult() { Success = false, Message = ex.Message };
             }
@@ -132,7 +172,7 @@ namespace ECFootball.Identity.API._Service.Service
         {
             try
             {
-                var user = await _userManager.Users.FirstOrDefaultAsync(u =>  userId == u.Id);
+                var user = await _userManager.Users.FirstOrDefaultAsync(u => userId == u.Id);
                 if (user == null) return new OperationResult() { Success = false, Message = "No data" };
 
                 user.MapDelete(deletedBy);
@@ -191,5 +231,34 @@ namespace ECFootball.Identity.API._Service.Service
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private string GetUserIdFromToken(string token)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(token)) return null;
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                if (!tokenHandler.CanReadToken(token)) return null;
+
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+                var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
     }
 }

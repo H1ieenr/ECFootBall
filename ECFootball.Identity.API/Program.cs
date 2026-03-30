@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ECFootball.Identity.API._Service.Service;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +65,15 @@ builder.Services.AddAuthentication(options =>
     };
     options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
 });
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetValue<string>("RedisSettings:Configuration");
+    options.InstanceName = builder.Configuration.GetValue<string>("RedisSettings:InstanceName");
+});
+builder.Services.AddScoped<RedisCacheService>();
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

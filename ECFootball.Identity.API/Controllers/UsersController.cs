@@ -35,6 +35,17 @@ namespace ECFootball.Identity.API.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto model)
+        {
+            var result = await _identityService.RefreshTokenAsync(model);
+            if (result == null)
+                return Unauthorized("Phiên đăng nhập đã hết hạn, vui lòng login lại.");
+
+            return Ok(result);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] UpdateUserDto dto)
         {
